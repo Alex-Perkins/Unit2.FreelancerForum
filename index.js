@@ -9,21 +9,33 @@ const freelance = [
     { name: "josh", job: "carpenter", start_price: "50" },
     { name: "allen", job: "programmer", start_price: "550" },
     { name: "avery", job: "fishsitter", start_price: "100" },
-    { name: "sarah", job: "tutor", start_price: "250" },
-]
-
-const addFreelance = [
-    { name: "will", job: "carpenter", start_price: "230" },
-    { name: "rebekka", job: "programmer", start_price: "340" },
-    { name: "ivory", job: "fishsitter", start_price: "200" },
-    { name: "aiden", job: "plumber", start_price: "700" },
 ]
 
 //Array of names
 
+const names = [
+     "barry" ,
+     "lena" ,
+     "adam" ,
+     "kim" ,
+     "alex" ,
+    "bert" ,
+]
+
 //Array of occupations
 
+const jobs = [
+ "consultant" ,
+ "accountant" ,
+ "CEO" ,
+ "botanist" ,
+ "clerk" ,
+ "finance" ,
+]
+
 //Append array
+
+
 
 /**
  * 
@@ -44,31 +56,55 @@ const addFreelance = [
  * 
  */
 
-function init() {
 
-    const myTable = document.querySelector("#mytable");
+
+function init() {
+    const root = document.querySelector("#root");
+
+    const h1 = document.createElement("h1");
+    h1.textContent = "Available Freelancers Forum";
+    root.append(h1);
+
+    const p = document.createElement("p");
+    p.textContent = "The average starting price is$66";
+    root.append(p);
+
+    const h2 = document.createElement("h2");
+    h2.textContent = "Freelancers Available";
+    root.append(h2);
 
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const header_row = document.createElement("tr");
-    const tbody = document.createElement("tbody");
 
-    for (let key in freelance[0]) {
+    ["Name", "Occupation", "Price"].forEach((headers) => {
         const th = document.createElement("th");
-        th.textContent = key;
-
+        th.textContent = headers;
         header_row.append(th);
-    }
+    });
 
     thead.append(header_row);
     table.append(thead);
+
+    const tbody = document.createElement("tbody");
+
+    freelance.forEach((freelance) => {
+        const elementRow = document.createElement("tr");
+
+        for (const key in freelance) {
+            const th = document.createElement("th");
+            th.textContent = freelance[key];
+            elementRow.append(th);
+        }
+
+        tbody.append(elementRow);
+    });
+
     table.append(tbody);
-
-    myTable.append(table);
-
-    flArray();
-
+    root.append(table);
 }
+
+
 
 /**
  * 
@@ -86,33 +122,70 @@ function init() {
  * 
  */
 
-function flArray() {
 
-    const flTable = document.querySelector("tbody");
 
-    const flElements = freelance.map((elem) => {
-        const tableRow = document.createElement("tr");
+function addInterval() {
+    const root = document.querySelector("#root")
 
-        const fl_name = document.createElement("td");
-        fl_name.textContent = elem.name;
+    const table = document.querySelector("table");
+    
+    const thead = document.createElement("thead");
+    const header_row = document.createElement("tr");
 
-        const fl_job = document.createElement("td");
-        fl_job.textContent = elem.job;
+    table.append(thead);
+    thead.append(header_row);
 
-        const fl_price = document.createElement("td");
-        fl_price = document.textContent = elem.start_price;
+    const tbody = document.createElement("tbody");
 
-        tableRow.append(fl_name);
-        tableRow.append(fl_job);
-        tableRow.append(fl_price);
+    freelance.forEach((freelance) => {
+        const elementRow = document.createElement("tr");
 
-        return tableRow;
+        for (const key in freelance) {
+            const th = document.createElement("th");
+            th.textContent = freelance[key];
+            elementRow.append(th);
+        }
+
+        tbody.append(elementRow);
 
     });
 
-    flTable.replaceChildren(...flElements);
+    table.replaceChildren(tbody);
+    root.append(table);
 
+    //const average = genAvgStrtPrice();
+    const para = document.querySelector("p");
+    para.textContent = `The average price of each hirable freelancer is ${genAvgStrtPrice()}`;
 }
+
+
+
+function genAvgStrtPrice() {
+    const totalAmt = freelance.reduce((start, curr) => start + curr.start_price * 1, 0);
+    return (totalAmt / freelance.length).toFixed(2);
+}
+
+
+
+function genFL() {
+    const N = Math.floor(Math.random() * names.length);
+    const O = Math.floor(Math.random() * jobs.length);
+    const P = Math.floor(Math.random() * 700);
+    const genNewFL = { name: names[N], job: jobs[O], start_price: P };
+    console.log(genNewFL);
+    return genNewFL;
+}
+
+
+
+function applyNewFL() {
+    const genNewFL = genFL();
+    freelance.push(genNewFL);
+    addInterval();
+
+};
+
+setInterval(applyNewFL, 1000);
 
 /**
  * 
@@ -125,23 +198,6 @@ function flArray() {
  *      5. replace children of the p tag with the updated span
  * 
  */
-
-function totalPrice(items) {
-    //TotalPrice
-    const priceAll = freelance.reduce((amount, items) => amount + items.start_price, 0);
-    return priceAll;
-}
-
-/**
- * 
- * @param {Number} totalPrice 
- * @param {Array} arr 
- * @returns Number
- */
-
-function avgPrice(totalPrice, arr) {
-    return totalPrice / arr.length;
-}
 
 /**
  *
@@ -159,15 +215,9 @@ function avgPrice(totalPrice, arr) {
  *
  */
 
-const flRandom = () => {
-    const flNew = addFreelance[Math.floor(Math.random() * addFreelance.random)];
+//setInternal calling the function that adds a new freelancer every second aka 1000 miliseconds
 
-    freelance.push(flNew);
-
-
-}
-
-    //setInternal calling the function that adds a new freelancer every second aka 1000 miliseconds
-
-    //Call init function
-    init();
+//Call init function
+init();
+applyNewFL();
+genAvgStrtPrice();
